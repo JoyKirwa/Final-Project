@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Upload Log File</h2>
+        <input type="file" id="logFileInput">
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody id="logTableBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('logFileInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const lines = e.target.result.split("\n");
+                const tableBody = document.getElementById('logTableBody');
+                tableBody.innerHTML = "";
+
+                lines.forEach(line => {
+                    const parts = line.split(",");
+                    if (parts.length >= 2) {
+                        const row = `<tr>
+                            <td>${parts[0]}</td>
+                            <td>${parts[1]}</td>
+                        </tr>`;
+                        tableBody.innerHTML += row;
+                    }
+                });
+            };
+            reader.readAsText(file);
+        });
+    </script>
+
+</body>
+
+</html>
